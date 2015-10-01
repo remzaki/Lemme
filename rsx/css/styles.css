@@ -1,0 +1,168 @@
+body{
+	height: 100%;
+	width: 100%;
+	margin: 0 auto;
+	font-family: Tahoma, Trebuchet MS, Lucida Sans;
+	/*font: 13px/20px normal Helvetica, Arial, sans-serif;*/
+	/*height:1024px;*/
+	min-width:768px;
+}
+
+/****************** header ******************/
+#header{
+	/*background:#c1c1c1;*/
+	background: rgb(100, 193, 100);			/*green*/
+	/*background: rgb(102, 176, 232);*/		/*blue*/
+	/*background: rgb(220, 187, 141);*/		/*orange*/
+	/*background: rgb(179, 162, 200);*/		/*purple*/
+	height:54px;
+	color: white;
+}
+#header a{
+	color:white;
+}
+.title{
+	padding-left: 1em;
+	padding-top:1em;
+	font-size:120%;
+	float:left;
+}
+.helper{
+	float:right;
+	padding-right: 1em;
+	padding-top:1.5em;
+}
+
+
+/****************** status ******************/
+#status{
+	/*background:#e1e1e1;*/
+	height:25px;
+	font-size: 80%;
+	border-bottom: 1px solid #D3D3D3;
+}
+#message{
+	float:left;
+	text-align: left;
+	padding-left: 1em;
+	color: orange;
+}
+#stats{
+	float:right;
+	text-align: right;
+	padding-right: 1em;
+	color:gray;
+}
+
+
+/****************** container ******************/
+#container{
+	/*background:#d1d1d1;*/
+	height:690px;
+	width:100%;
+	min-width:768px;
+}
+
+.controlpanel{
+	/*background:#b2b2b2;*/
+	height:100%;
+	width:25%;
+	min-width:250px;
+	float:left;	/* switch Left/Right*/
+}
+.control{
+	/*border:1px dashed black;*/
+	height:100%;
+	width:100%;
+}
+.control div{
+	width:250px;
+	padding-left:1em;
+	float:right; /* switch Left/Right*/
+}
+#submitbtn{
+	height:3em;
+	width:220px;
+	border-radius:5px;
+	font-size:110%;
+}
+#submitbtn:hover{
+	background: rgb(81, 163, 81);
+}
+#more{
+	padding-top: 1em;
+	height:4em;
+}
+#more input{
+	height:100%;
+	width:100%;
+	background: white;
+	border:1px solid #D3D3D3;
+	border-radius: 7px;
+	color: #08C;
+}
+#more input:hover{
+	background:white;
+	border:1px solid #808080;
+	color: #005580;
+	text-decoration: underline;
+}
+.options{
+	padding-top:0.5em;
+	text-align:center;
+}
+.options a{
+	display:block;
+}
+.options a, #url input{
+	padding:0.5em 0em 0.5em 0em;
+	width: 220px;
+	border: 1px solid lightgray;
+	border-radius:5px;
+}
+.options a:hover{
+	/*border: 1px solid rgb(0, 85, 128);*/
+	border: 1px solid gray;
+}
+#url input{
+	background: white;
+	border:1px solid #D3D3D3;
+	color: #08C;
+	/*float:left;*/
+	
+}
+#url input:hover{
+	background:white;
+	border:1px solid #808080;
+	color: #005580;
+	text-decoration: underline;
+}
+
+.resultpanel{
+	/*background:#a2a2a2;*/
+	height:100%;
+	width:75%;
+	min-width:500px;
+	float:right; /* switch Left/Right*/
+}
+.result{
+	/*border:1px dashed black;*/
+	height:100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.result #resultstable{
+	padding: 1em 1em 0 1em;
+	
+}
+.result #resultstable table{
+	width:100%;
+}
+.result #resultstable table tr td{
+	text-align: center;
+}
+.result #resultstable table tr:hover{
+	background: #E6E6E6;
+}
+
+

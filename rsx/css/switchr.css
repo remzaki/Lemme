@@ -1,0 +1,11 @@
+.controlpanel{
+	float:right;
+}
+.control div, .resultpanel{
+	float:left;
+}
+#url input{
+	margin-left:-1em;
+	padding-left:-1em;
+	float:left;
+}
