@@ -13,14 +13,37 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="<?php echo base_url("lemme");?>/resources/css/normalize.css">
     <link rel="stylesheet" href="<?php echo base_url("lemme");?>/resources/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo base_url("lemme");?>/resources/css/main.css">
-    <script>var base_url='<?php echo base_url("lemme");?>';$(document).ready(function(){$(function(){$('[data-toggle="tooltip"]').tooltip();});});</script>
+    <script>var base_url='<?php echo base_url("lemme");?>';$(document).ready(function(){$(function(){$('[data-toggle="tooltip"]').tooltip();});});
+    function able(){
+			var e = document.getElementById("table");
+			var strUser = e.options[e.selectedIndex].text;
+			document.getElementById("transtype").disabled = false;
+			if(strUser!=="Transactions"){
+				//	DISABLE THE TRANSACTION TYPE DROPDOWN
+				document.getElementById("transtype").disabled = true;
+			}
+		}
+    function pick(e){
+			var prev = document.getElementById('hylyt').value;
+			if(prev!==""){
+//				document.getElementById(prev).style.background='';
+                                document.getElementById(prev).className='';
+			}
+//			onmouseup = document.getElementById(e).style.background='#D6D6D6';
+                        onmouseup = document.getElementById(e).className='active';
+			document.getElementById('hylyt').value=e;
+		};
+    $(function () {
+        $('[data-toggle="popover"]').popover();
+      })
+    </script>
 </head>
 <body ng-controller="">
     <!-- Navigation -->
     <nav id="nav-header" class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="/lemme/" style="color:#fff;"><span id="" class="glyphicon glyphicon-home" style="font-size:1.5em;line-height:20px;"></span></a>
+                <a class="navbar-brand" href="/lemme/home#poslog" style="color:#fff;"><span id="" class="glyphicon glyphicon-home" style="font-size:1.5em;line-height:20px;"></span></a>
                 <p class="navbar-text" style=""><u>Search POSLog</u> to the Database and verify. <a href="#"><u>Help</u></a></p>
             </div>
             <div class="navbar-menu">
@@ -86,13 +109,55 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- ConnSettings Modal -->
     <!-- Form Inputs -->
     <div id="form">
-        <div id="header-form">
-            <div class="input-group">
-                <span class="input-group-addon">Parameter</span>
-                <input type="text" class="form-control" placeholder="Parameter Name, Field or Group" aria-describedby="sizing-addon1" id="search" ng-model="query.$" autofocus>
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" ng-click="clear()">Clear</button>
-                </span>
+        <div id="header-form2">
+            <div class="filter-group">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">Table</span>
+                            <select id="table" class="form-control" name="table" onchange="able()">
+                                <option value="Transactions"<?php echo set_select('table', 'Transactions', TRUE); ?>>Transactions</option>
+                                <option value="ErrorQueue"<?php echo set_select('table', 'ErrorQueue'); ?>>ErrorQueue</option>
+                                <option value="InputQueue"<?php echo set_select('table', 'InputQueue'); ?>>InputQueue</option>
+                                <option value="OutputQueue"<?php echo set_select('table', 'OutputQueue'); ?>>OutputQueue</option>
+                                <option value="PendingQueue"<?php echo set_select('table', 'PendingQueue'); ?>>PendingQueue</option>
+                            </select>
+                        </div>
+                    </div> | 
+                    <div class="form-group">
+                      <div class="input-group">
+                            <span class="input-group-addon">Store #</span>
+                            <input id="filters" type="text" class="form-control" placeholder="" id="" ng-model="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group">
+                            <span class="input-group-addon">Terminal #</span>
+                            <input id="filters" type="text" class="form-control" placeholder="" id="" ng-model="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group">
+                            <span class="input-group-addon">Transaction #</span>
+                            <input id="filters" type="text" class="form-control" placeholder="" id="" ng-model="">
+                        </div>
+                    </div> | 
+                    <div class="form-group">
+                      <div class="input-group">
+                            <span class="input-group-addon">Type</span>
+                            <select id="transtype" class="form-control" name="transtype" onchange="able()">
+                                <option>All</option>
+                                <option>Sale</option>
+                                <option>Return</option>
+                                <option>Others</option>
+                                <option>Incomplete Transaction</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-refresh"></span> Search</button>
+                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Generate URL Sharing"><span class="glyphicon glyphicon-link"></span></button>
+                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Generate SQL Script"><span class="glyphicon glyphicon-th-list"></span></button>
+                </form>
             </div>
         </div>
     </div>
@@ -100,11 +165,46 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <i id="top"></i>
     <div id="result-body" class="panel panel-default">
         <div class="panel-body">
-            <div id="{{result.rParameter}}" class="result-row" ng-repeat="result in results | filter:query:strict">
-                <p><b>{{result.Parameter}}</b></p>
-                <p>Location: {{result.Tab}} &gt; {{result.Category}} &gt; {{result.Group}} &gt; {{result.Parameter}}</p>
-                <p>Raw Path: &lt;{{result.rCategory}}&gt; &#47; &lt;{{result.rParameter}}&gt;</p>
-                <p>Description: {{result.Description}}</p>
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-condensed">
+                    <thead>
+                        <tr>
+                            <th>TransType</th>
+                            <th>TransTypeId</th>
+                            <th>Store</th>
+                            <th>Terminal</th>
+                            <th>POSLog</th>
+                            <th colspan='2' style="text-align:center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <input id='hylyt' type='hidden' value=''/>
+                        <?php
+                            $x = 1;
+                            while($x!=99){
+                                ?>
+                        <tr id="<?php echo $x;?>" onclick='pick("<?php echo $x; ?>")'>
+                            <td>Sale</td>
+                            <td>1</td>
+                            <td>111</td>
+                            <td>2</td>
+                            <td><a href="">0001234654650032103210679876510032103165400<?php echo $x;?></a></td>
+                            <td style="text-align: center;">
+                                <a class="btn btn-default" href="" data-toggle="tooltip" data-placement="bottom" title="Open">
+                                    <span style="position: initial;" class="glyphicon glyphicon-open"></span>
+                                </a>
+                                <a class="btn btn-default" href="" data-toggle="tooltip" data-placement="bottom" title="Download">
+                                    <span style="position: initial;" class="glyphicon glyphicon-download-alt"></span>
+                                </a>
+                            </td>
+                        </tr>
+                        <?php
+                                $x++;
+                            }
+                        ?>
+                        <!--<tr><td>Sale</td><td>1</td><td>111</td><td>2</td><td><a href="">00012346546500321032106798765100321031654001</a></td><td style="text-align: center;"><a class="btn btn-primary" href=""><span style="position: initial;" class="glyphicon glyphicon-open"></span> Open</a> <a class="btn btn-primary" href=""><span style="position: initial;" class="glyphicon glyphicon-download-alt"></span> Download</a></td></tr>-->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

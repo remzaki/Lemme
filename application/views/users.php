@@ -20,7 +20,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <nav id="nav-header" class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="/lemme/" style="color:#fff;"><span id="" class="glyphicon glyphicon-home" style="font-size:1.5em;line-height:20px;"></span></a>
+                <a class="navbar-brand" href="/lemme/home#users" style="color:#fff;"><span id="" class="glyphicon glyphicon-home" style="font-size:1.5em;line-height:20px;"></span></a>
                 <p class="navbar-text"><u>Search Users</u> for statuses and informations. <a href="#"><u>Help</u></a></p>
             </div>
             <div class="navbar-menu">
@@ -49,7 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <form ng-submit="search()">
             <div class="input-group">
                 <span class="input-group-addon" id="sizing-addon">Org Unit / Store Number</span>
-                <input type="text" class="form-control" placeholder="####" aria-describedby="sizing-addon1" ng-model="store">
+                <input id="store" type="text" class="form-control" placeholder="####" aria-describedby="sizing-addon1" ng-model="store" autofocus>
                 <span class="input-group-btn">
                     <button id="search" class="btn btn-default" type="submit">Search</button>
                 </span>

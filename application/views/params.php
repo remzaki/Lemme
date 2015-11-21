@@ -20,7 +20,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <nav id="nav-header" class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="/lemme/" style="color:#fff;"><span id="" class="glyphicon glyphicon-home" style="font-size:1.5em;line-height:20px;"></span></a>
+                <a class="navbar-brand" href="/lemme/home#params" style="color:#fff;"><span id="" class="glyphicon glyphicon-home" style="font-size:1.5em;line-height:20px;"></span></a>
                 <p class="navbar-text" style=""><u>Search Parameter</u> details and various parameter related informations. <a href="#"><u>Help</u></a></p>
             </div>
             <div class="navbar-menu">
