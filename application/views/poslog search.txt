@@ -1,5 +1,0 @@
-main
-footer.php
-header.php
-sql.php
-status.php

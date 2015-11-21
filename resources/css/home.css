@@ -15,14 +15,60 @@
 
 body{
     font-family: Open Sans Regular;
-    overflow-x: hidden;
-    overflow-y: auto;
-    background: #2E2E2E;
+/*    overflow-x: auto;
+    overflow-y: hidden;*/
+    overflow: hidden;
+    /*background: #2E2E2E;*/
+    /*position: relative;*/
 }
 
 #nav-header{
     background: #2E2E2E;
     border: none;
     border-radius: 0;
-    height: 6em;
+    position: fixed;
+    width: 100%;
+    height: 50px;
+    box-shadow: 0em 0em 1em #2E2E2E;
+}
+.nav-tabs{
+    border: none;
+}
+.nav-tabs li{
+    margin-top: 8px;
+}
+
+.apps{
+    max-width: 1024px;
+    margin: 0 auto;
+    height: 72em;
+    padding-top: 5em;
+    margin-bottom: 0em;
+}
+.apps .jumbotron{
+    padding: 1em 3em 1em 3em;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    
+}
+.apps .media{
+    padding: 0em 5em 1.5em 5em;
+}
+.apps-background{
+    background: #FFF;
+    border-radius: 5px;
+    box-shadow: 0em 0em 1em #2E2E2E;
+}
+.media-left span{
+    font-size: 2em;
+}
+
+#poslog{
+    background: url(../img/wallpaper-1188766.jpg);
+}
+#params{
+    background: url(../img/wallhaven-157244.jpg);
+}
+#users{
+    background: url(../img/wallhaven-230807.jpg);
 }

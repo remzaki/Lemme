@@ -27,6 +27,8 @@ body{
     border-radius: 0;
     position: fixed;
     width: 100%;
+    box-shadow: 0em 0em 1em #2E2E2E;
+    z-index: 500;
 }
 
 #loader{
@@ -41,6 +43,7 @@ body{
     width: 100%;
     background: #fff;
     border-bottom: 1px solid whitesmoke;
+    z-index: 100;
 	/*box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25), 0px -1px 0px rgba(0, 0, 0, 0.1) inset;*/
 }
 .container-fluid, .navbar-brand{
@@ -50,6 +53,11 @@ body{
 #header-form{
     width: 40%;
     margin: 0 auto;
+    overflow: auto;
+}
+#header-form2{
+    margin: 0 auto;
+    overflow: auto;
 }
 
 .navbar-menu{
@@ -220,7 +228,13 @@ div[id^="stat6"], div[id*="stat6"] {
     height: 5em;
 }
 
-
+.filter-group{
+    max-width:1283px;
+    margin: 0 auto;
+}
+#filters{
+    width: 7em;
+}
 
 
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
