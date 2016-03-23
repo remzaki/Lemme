@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Glyphicons Halflings";
-  src: url("../fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
+  src: url("../fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
 }
 
 @font-face {
@@ -53,11 +53,11 @@ body{
 #header-form{
     width: 40%;
     margin: 0 auto;
-    overflow: auto;
 }
 #header-form2{
     margin: 0 auto;
-    overflow: auto;
+    overflow-x: hidden;
+    height: 34px;
 }
 
 .navbar-menu{
@@ -132,6 +132,26 @@ body{
     box-shadow: none;
 }
 
+th, td{
+    text-align: center;
+}
+td{
+    line-height: 2em;
+}
+#transtype{
+    width: 213px;
+}
+
+#transtypeid, #terminal{
+    width: 127px;
+}
+#action{
+    width: 7%;
+}
+#error{
+    text-align: left;
+}
+
 .panel-body{
     overflow-y: auto;
     /*border: 1px dashed red;*/
@@ -150,7 +170,9 @@ body{
 .result-row:hover, .result-user-row:hover{
     background: whitesmoke;
 }
-
+.table-responsive table td{
+    text-align: center;
+}
 .result-panel-body{
     margin: 0 auto;
     height: 100%;

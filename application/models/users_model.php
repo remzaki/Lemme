@@ -11,7 +11,6 @@ class users_model extends CI_Model {
         $dbcon_init = $this->db_model->dbcon_init($server, $instance, $username, $password, $database);
         if(!$this->db_model->dbcon_check($dbcon_init)){
             return FALSE;
-            exit();
         }
 
         return $dbcon_init;

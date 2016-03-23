@@ -153,7 +153,7 @@ class params_model extends CI_Model {
             exit();
         }
         
-        $query = "select * from ParameterDefaultData where GroupName=? order by RecordKey asc";
+        $query = "select * from ParameterDefaultData where GroupName=? order by RecordKey asc, FieldName asc";
         $result = $dbcon_init->query($query, array($group));
         if ($result->num_rows() > 0){
             return $result->result();

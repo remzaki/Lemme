@@ -39,7 +39,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       })
     </script>
 </head>
-<body ng-controller='POSLog' ng-init="base_url='<?php echo base_url("lemme");?>'">
+<body ng-controller='DemoController'>
     <!-- Navigation -->
     <nav id="nav-header" class="navbar navbar-default">
         <div class="container-fluid">
@@ -112,11 +112,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div id="form">
         <div id="header-form2">
             <div class="filter-group">
-                <form class="form-inline" ng-submit="search(table, store, term, trans, transtype)">
+                <form class="form-inline">
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon">Table</span>
-                            <select id="table" class="form-control" name="table" onchange="able()" ng-model="table">
+                            <select id="table" class="form-control" name="table" onchange="able()">
                                 <option value="Transactions"<?php echo set_select('table', 'Transactions', TRUE); ?>>Transactions</option>
                                 <option value="ErrorQueue"<?php echo set_select('table', 'ErrorQueue'); ?>>ErrorQueue</option>
                                 <option value="InputQueue"<?php echo set_select('table', 'InputQueue'); ?>>InputQueue</option>
@@ -128,88 +128,117 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="form-group">
                       <div class="input-group">
                             <span class="input-group-addon">Store #</span>
-                            <input id="filters" type="text" class="form-control" placeholder="" ng-model="store">
+                            <input id="filters" type="text" class="form-control" placeholder="" id="">
                         </div>
                     </div>
                     <div class="form-group">
                       <div class="input-group">
                             <span class="input-group-addon">Terminal #</span>
-                            <input id="filters" type="text" class="form-control" placeholder="" ng-model="term">
+                            <input id="filters" type="text" class="form-control" placeholder="" id="">
                         </div>
                     </div>
                     <div class="form-group">
                       <div class="input-group">
                             <span class="input-group-addon">Transaction #</span>
-                            <input id="filters" type="text" class="form-control" placeholder="" ng-model="trans">
+                            <input id="filters" type="text" class="form-control" placeholder="" id="">
                         </div>
                     </div> | 
                     <div class="form-group">
                       <div class="input-group">
                             <span class="input-group-addon">Type</span>
-                            <select id="transtype" class="form-control" name="transtype" onchange="able()" ng-model="transtype" ng-options="type.TransactionTypeID as type.TransactionTypeDescription for type in types">
-                                <option value="">All</option>
-                                <!--option ng-repeat="type in types" value="{{type.TransactionTypeID}}">{{type.TransactionTypeDescription}}</option-->
+                            <select id="transtype" class="form-control" name="transtype" onchange="able()">
+                                <option>All</option>
+                                <option>Sale</option>
+                                <option>Return</option>
+                                <option>Others</option>
+                                <option>Incomplete Transaction</option>
                             </select>
                         </div>
                     </div>
-                    <button id="search" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-refresh"></span></button>
-<!--                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Generate URL Sharing"><span class="glyphicon glyphicon-link"></span></button>
-                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Generate SQL Script"><span class="glyphicon glyphicon-th-list"></span></button>-->
+                    <button id="search" type="submit" class="btn btn-primary" ng-submit="search()" ng-o><span class="glyphicon glyphicon-refresh"></span> Search</button>
+                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Generate URL Sharing"><span class="glyphicon glyphicon-link"></span></button>
+                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Generate SQL Script"><span class="glyphicon glyphicon-th-list"></span></button>
                 </form>
             </div>
         </div>
     </div>
     <!-- Results -->
-    <a name="top" id="top"></a>
+    <i id="top"></i>
     <div id="result-body" class="panel panel-default">
         <div class="panel-body">
             <div class="table-responsive">
                 <table class="table table-hover table-bordered table-condensed">
                     <thead>
                         <tr>
-                            <th ng-show="layout==='Transactions'">TransType</th>
-                            <th id="transtypeid" ng-show="layout==='Transactions'">TransTypeId</th>
-                            <th ng-show="layout==='Transactions'">Store</th>
-                            <th id='terminal' ng-show="layout==='Transactions'">Terminal</th>
-                            <th ng-show="layout!=='Transactions'">SequenceNumber</th>
-                            <th ng-show="layout!=='Transactions'">TenantId</th>
-                            <th>POSLog</th>
-                            <th ng-show="layout==='ErrorQueue'">Error</th>
-                            <th colspan='2' id="action">Action</th>
-                        </tr>
-<!--                        <tr>
                             <th>TransType</th>
                             <th>TransTypeId</th>
                             <th>Store</th>
                             <th>Terminal</th>
                             <th>POSLog</th>
                             <th colspan='2' style="text-align:center;">Action</th>
-                        </tr>-->
+                        </tr>
                     </thead>
-                    <tbody infinite-scroll="loadMore(table, store, term, trans, transtype)" infinite-scroll-disabled="busy" infinite-scroll-distance="0">
-                        <tr ng-repeat="item in items" ng-click="setSelected(item.TranID)" ng-class="{active : item.TranID === idSelected}">
-                            <td ng-show="layout==='Transactions'">{{item.TransType}}</td>
-                            <td ng-show="layout==='Transactions'">{{item.TransTypeId}}</td>
-                            <td ng-show="layout==='Transactions'">{{item.StoreId}}</td>
-                            <td ng-show="layout==='Transactions'">{{item.TermId}}</td>
-                            <td ng-show="layout!=='Transactions'">{{item.SequenceNumber}}</td>
-                            <td ng-show="layout!=='Transactions'">{{item.TenantId}}</td>
-                            <td><a target="_blank" ng-href="{{base_url}}/poslog/{{item.TranID}}">{{item.TranID}}</a></td>
-                            <td ng-show="layout==='ErrorQueue'" id="error">{{item.Error}}</td>
+                    <tbody infinite-scroll="reddit.nextPage()" infinite-scroll-disabled="reddit.busy" infinite-scroll-distance="0" infinite-scroll-listen-for-event="qwe">
+                        <tr ng-repeat="item in reddit.items">
+                            <td>{{item.score}}</td>
+                            <td>{{item.title}}</td>
+                            <td>{{item.author}}</td>
+                            <td></td>
+                            <td><a href="">{{item.num_comments}}</a></td>
                             <td style="text-align: center;">
-                                <a target="_blank" class="btn btn-default" ng-href="{{base_url}}/poslog/{{item.TranID}}" data-toggle="tooltip" data-placement="bottom" title="Open" tooltip>
+                                <a class="btn btn-default" href="" data-toggle="tooltip" data-placement="bottom" title="Open">
                                     <span style="position: initial;" class="glyphicon glyphicon-open"></span>
                                 </a>
-                                <a target="_blank" class="btn btn-default" ng-href="{{base_url}}/poslog/{{item.TranID}}?action=download" data-toggle="tooltip" data-placement="bottom" title="Download" tooltip>
+                                <a class="btn btn-default" href="" data-toggle="tooltip" data-placement="bottom" title="Download">
                                     <span style="position: initial;" class="glyphicon glyphicon-download-alt"></span>
                                 </a>
                             </td>
                         </tr>
-                        <tr ng-show="busy"><td colspan="6" style='text-align:center;'>Loading data...</td></tr>
+                        <tr ng-show="reddit.busy"><td colspan="6" style='text-align:center;'>Loading data...</td></tr>
                     </tbody>
+<!--                    <tbody>
+                        <input id='hylyt' type='hidden' value=''/>
+                        <?php
+                            $x = 1;
+                            while($x!=99){
+                                ?>
+                        <tr id="<?php echo $x;?>" onclick='pick("<?php echo $x; ?>")'>
+                            <td>Sale</td>
+                            <td>1</td>
+                            <td>111</td>
+                            <td>2</td>
+                            <td><a href="">0001234654650032103210679876510032103165400<?php echo $x;?></a></td>
+                            <td style="text-align: center;">
+                                <a class="btn btn-default" href="" data-toggle="tooltip" data-placement="bottom" title="Open">
+                                    <span style="position: initial;" class="glyphicon glyphicon-open"></span>
+                                </a>
+                                <a class="btn btn-default" href="" data-toggle="tooltip" data-placement="bottom" title="Download">
+                                    <span style="position: initial;" class="glyphicon glyphicon-download-alt"></span>
+                                </a>
+                            </td>
+                        </tr>
+                        <?php
+                                $x++;
+                            }
+                        ?>
+                    </tbody>-->
                 </table>
-                <style>td{line-height: 2em;}</style>
             </div>
+<!--            <div ng-app='myApp' ng-controller='DemoController'>
+                <div infinite-scroll='reddit.nextPage()' infinite-scroll-disabled='reddit.busy' infinite-scroll-distance='3'>
+                  <div ng-repeat='item in reddit.items'>
+                    <span class='score'>{{item.score}}</span>
+                    <span class='title'>
+                      <a ng-href='{{item.url}}' target='_blank'>{{item.title}}</a>
+                    </span>
+                    <small>by {{item.author}} -
+                      <a ng-href='http://reddit.com{{item.permalink}}' target='_blank'>{{item.num_comments}} comments</a>
+                    </small>
+                    <div style='clear: both;'></div>
+                  </div>
+                  <div ng-show='reddit.busy'>Loading data...</div>
+                </div>
+            </div>-->
         </div>
     </div>
 <!-- Footer -->

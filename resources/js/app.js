@@ -1,3 +1,4 @@
+var PSApp = angular.module('PSApp',['infinite-scroll']);
 var myApp = angular.module('myApp',[]);
 
 myApp.controller('Search', function ($scope, $http) {
@@ -11,6 +12,9 @@ myApp.controller('Search', function ($scope, $http) {
 	// - OFFLINE STATUS
 	// - DONT GET PARAMS
         // - DISPLAY ERROR
+        $scope.username = 'sa';
+        $scope.password = 'RTE$t0re';
+        
         $http.get(base_url+'/params/preset',{headers: {'Content-Type': 'application/json'}}).
             then(function(data) {
                 $scope.server = data.data[0].Server;
@@ -24,6 +28,7 @@ myApp.controller('Search', function ($scope, $http) {
                 
             }, function(response) {
                 loader("hide");
+                $('#ConnSettings').modal('show');
             });
             
 	function conn_db_req(server){
@@ -163,10 +168,6 @@ myApp.controller('Search', function ($scope, $http) {
             getgroupdetails(group)
         };
                 
-});
-
-myApp.controller('test', function ($scope, $http) {
-    
 });
 
 myApp.controller('Users', function ($scope, $http) {
@@ -357,4 +358,179 @@ myApp.controller('Users', function ($scope, $http) {
         unlock(userid)
     };
     
+});
+
+PSApp.controller('POSLog', function($scope, $http, $anchorScroll) {
+    var server = $scope.server = "";
+    var instance = $scope.instance = "NCRWO";
+    var username = $scope.username = "rteuser";
+    var password = $scope.password = "RTE$t0re";
+    $scope.table = 'Transactions';
+    $scope.store = '';
+    $scope.term = '';
+    $scope.trans = '';
+    $scope.transtype = null;
+    $scope.end = false;
+    $scope.types = '';
+    $scope.idSelected = null;
+    
+    modal_toggle();
+    
+    function modal_toggle(){
+        if(server===""){
+            $('#ConnSettings').modal('show');
+            $('#server').focus();
+            document.getElementById("search").disabled=true;
+        }
+    }
+    
+    function conn_db_req(server, table, store, term, trans, transtype){
+        var req = {
+         method: 'POST',
+         url: base_url+'/users/connect',
+         headers: {
+                'Content-Type': 'application/json'
+         },
+        data: {
+                'server' : $scope.server,
+                'instance' : $scope.instance,
+                'username' : $scope.username,
+                'password' : $scope.password
+                }
+        };
+        
+        status("hidden");    
+        loader("show");
+        $scope.items = [];
+        document.getElementById("search").disabled=true;
+
+        $http(req).
+        success(function() {
+            loader("hide");
+            status("online");
+            document.getElementById("search").disabled=false;
+            $scope.msg = {data:'Online to', server:server};
+            $scope.after = 0;
+            $scope.end = false;
+            $anchorScroll("#top");
+            $scope.loadMore(table, store, term, trans, transtype);
+        }).
+        error(function() {
+            loader("hide");
+            status("offline");
+            $scope.msg = {data:'Offline to', server:server};
+        });
+    }	// function conn_db_req() end
+    
+    function loader(opt){
+        var elem = angular.element('#loader');
+        if(opt==="show"){
+            elem.show();	//	SHOW LOADER
+            var spinner = document.getElementById("settings");
+            spinner.className = spinner.className="spinmenow";
+//                console.log(spinner);
+        }else{
+            elem.hide();     //	HIDE LOADER
+            var spinner = document.getElementById("settings");
+            spinner.className = spinner.className="spin";
+        }
+    }
+        
+    function status(status){
+        var ele = document.getElementById("status");
+        var status_icon = document.getElementById("navicn-status");
+
+        ele.className = ele.className=status;
+
+        if(status==="online"){
+            status_icon.className = status_icon.className="glyphicon glyphicon-ok-circle";
+        }else{
+            status_icon.className = status_icon.className="glyphicon glyphicon-remove-circle";
+        }
+    }
+    
+    $scope.loadMore = function(table, store, term, trans, transtype) {
+        if(($scope.server!=="") && ($scope.after / 10 % 1 === 0)){
+            if (this.busy) return;
+            this.busy = true;
+            
+            var req = {
+            method: 'POST',
+            url: base_url+'/poslog/search',
+            headers: {
+                   'Content-Type': 'application/json'
+            },
+            data: {
+                   'server' : $scope.server,
+                   'instance' : $scope.instance,
+                   'username' : $scope.username,
+                   'password' : $scope.password,
+                   'i' : parseInt(this.after),
+                   'table' : table,
+                   'store' : store,
+                   'term' : term,
+                   'trans' : trans,
+                   'transtype' : transtype
+                   }
+            };
+            
+            $http(req).
+            success(function(data) {
+                $scope.types = data[1];
+                var items = data[0];
+                for (var i = 0; i < items.length; i++) {
+                    this.items.push(items[i]);
+                }
+                this.after = this.items[this.items.length - 1].RowNum;
+                this.busy = false;
+                
+                $scope.layout = table;
+            }.bind(this)).
+            error(function(status) {
+                if(status !=="") console.log(status);
+                $scope.end = true;
+                $scope.busy = false;
+            });
+        }
+    };
+    
+    $scope.connect = function(){
+        $('#ConnSettings').modal('hide');
+        $scope.table = 'Transactions';
+        $scope.store = null;
+        $scope.term = null;
+        $scope.trans = null;
+        $scope.transtype = null;
+        //        conn_db_req($scope.server, $scope.table, $scope.store, $scope.term, $scope.trans, $scope.transtype);
+        conn_db_req($scope.server, $scope.table,'','','','');
+    };
+    
+    $scope.search = function(table, store, term, trans, transtype){
+        $scope.items = [];
+        $scope.after = 0;
+        $scope.end = false;
+        $scope.loadMore(table, store, term, trans, transtype);
+        $anchorScroll("#top");
+        $scope.layout = table;
+    };
+    
+    $scope.setSelected = function(idSelected){
+        $scope.idSelected = idSelected;
+    };
+    
+});
+
+PSApp.directive('tooltip', function(){
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs){
+            $(element).hover(function(){
+                // on mouseenter
+                $(element).tooltip('show');
+            }, function(){
+                // on mouseleave
+                $(element).tooltip('hide');
+            });
+        }
+    };
 });
