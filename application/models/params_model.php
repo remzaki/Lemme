@@ -6,53 +6,13 @@ class params_model extends CI_Model {
         $this->load->model('db_model');
     }
 
-    public function preset()
-    {
-        $this->load->database();
-
-        $query = $this->db->query('SELECT Server, Instance, Username, Password FROM params ORDER BY ID DESC LIMIT 1');
-
-        if ($query->num_rows() > 0){
-            return $query->result();
-        }
-        else{
-            return FALSE;
-        }
-    }
-     /*end of preset*/
-
-    public function update_default($server, $instance, $username, $password, $database)
-    {
-        $this->load->database();
-
-        $date=date("m-d-Y D g:i:s A");
-        $data = array(
-            'Server' => ($server),
-            'Instance' => ($instance),
-            'Username' => ($username),
-            'Password' => ($password),
-            'DateAdded' => ($date)
-        );
-
-        $query = $this->db->insert('params', $data);
-
-        if ($query){
-            return TRUE;
-        }
-        else{
-            return FALSE;
-        }
-    }
-     /*end of update_default*/
-
     public function search($server, $instance, $username, $password, $database)
     {
         $dbcon_init = $this->db_model->dbcon_init($server, $instance, $username, $password, $database);
         if(!$this->db_model->dbcon_check($dbcon_init)){
-                        return FALSE;
-                        exit();
+            return FALSE;
         }
-
+        
         $script = "select DisplayName Parameter,
                     pc.Name Category,
                     pg.[Description] [Group],
@@ -60,12 +20,15 @@ class params_model extends CI_Model {
                     pg.GroupName rGroup,
                     pf.FieldName rParameter,
                     pf.[Description] [Description],
+                    vt.UIControlId UIType,
                     pg.RecordLimit
                     from ParameterCategory pc
                     join DeviceClass dc on pc.DeviceClassId=dc.DeviceClassId
                     join ParameterGroup pg on pc.ParameterCategoryId=pg.ParameterCategoryId
-                    join ParameterField pf on pf.GroupName=pg.GroupName                    
+                    join ParameterField pf on pf.GroupName=pg.GroupName
+                    join ValidationType vt on pf.ValidationTypeId=vt.ValidationTypeId
                     ";
+        
         $query = $dbcon_init->query($script);
 
         if ($query->num_rows() > 0){
@@ -82,7 +45,6 @@ class params_model extends CI_Model {
         $dbcon_init = $this->db_model->dbcon_init($server, $instance, $username, $password, $database);
         if(!$this->db_model->dbcon_check($dbcon_init)){
             return FALSE;
-            exit();
         }
 
         $script = "select DisplayName Field,
@@ -146,14 +108,13 @@ class params_model extends CI_Model {
     /*end if getdetails*/
     
     public function getgroupdetails($server, $instance, $username, $password, $database, $group)
-    {
+    {      
         $dbcon_init = $this->db_model->dbcon_init($server, $instance, $username, $password, $database);
         if(!$this->db_model->dbcon_check($dbcon_init)){
             return FALSE;
-            exit();
         }
         
-        $query = "select * from ParameterDefaultData where GroupName=? order by RecordKey asc, FieldName asc";
+        $query = "select * from ParameterDefaultData where GroupName=? order by KeyValue asc, FieldName asc";
         $result = $dbcon_init->query($query, array($group));
         if ($result->num_rows() > 0){
             return $result->result();

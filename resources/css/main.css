@@ -165,6 +165,7 @@ td{
     margin-bottom: 0.5em;
     border-radius: 5px;
     padding: 1em;
+    padding-left: 2em;
 }
 
 .result-row:hover, .result-user-row:hover{

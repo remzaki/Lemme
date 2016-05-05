@@ -12,10 +12,10 @@ myApp.controller('Search', function ($scope, $http) {
 	// - OFFLINE STATUS
 	// - DONT GET PARAMS
         // - DISPLAY ERROR
-        $scope.username = 'sa';
+        $scope.username = 'rteuser';
         $scope.password = 'RTE$t0re';
         
-        $http.get(base_url+'/params/preset',{headers: {'Content-Type': 'application/json'}}).
+        $http.get(base_url+'/api/preset',{headers: {'Content-Type': 'application/json'}}).
             then(function(data) {
                 $scope.server = data.data[0].Server;
                 $scope.instance = data.data[0].Instance;
@@ -171,13 +171,26 @@ myApp.controller('Search', function ($scope, $http) {
 });
 
 myApp.controller('Users', function ($scope, $http) {
-//    $scope.store="111";
     var server = $scope.server = "";
-    var instance = $scope.instance = "NCRWO";
+    var instance = $scope.instance = "";
     var username = $scope.username = "rteuser";
     var password = $scope.password = "RTE$t0re";
     
-    modal_toggle();
+    $http.get(base_url+'/api/preset',{headers: {'Content-Type': 'application/json'}}).
+            then(function(data) {
+                $scope.server = data.data[0].Server;
+                $scope.instance = data.data[0].Instance;
+                $scope.username = data.data[0].Username;
+                $scope.password = data.data[0].Password;
+                
+                status("hidden");
+                loader("show");
+                conn_db_req($scope.server);
+                
+            }, function(response) {
+                loader("hide");
+                modal_toggle();
+            });
 
     function modal_toggle(){
         if(server===""){
@@ -362,7 +375,7 @@ myApp.controller('Users', function ($scope, $http) {
 
 PSApp.controller('POSLog', function($scope, $http, $anchorScroll) {
     var server = $scope.server = "";
-    var instance = $scope.instance = "NCRWO";
+    var instance = $scope.instance = "";
     var username = $scope.username = "rteuser";
     var password = $scope.password = "RTE$t0re";
     $scope.table = 'Transactions';
@@ -374,7 +387,20 @@ PSApp.controller('POSLog', function($scope, $http, $anchorScroll) {
     $scope.types = '';
     $scope.idSelected = null;
     
-    modal_toggle();
+    $http.get(base_url+'/api/preset',{headers: {'Content-Type': 'application/json'}}).
+            then(function(data) {
+                $scope.server = data.data[0].Server;
+                $scope.instance = data.data[0].Instance;
+                $scope.username = data.data[0].Username;
+                $scope.password = data.data[0].Password;
+                
+                status("hidden");
+                loader("show");
+                conn_db_req($scope.server, $scope.table, $scope.store, $scope.term, $scope.trans, $scope.transtype);
+            }, function(response) {
+                loader("hide");
+                modal_toggle();
+            });
     
     function modal_toggle(){
         if(server===""){

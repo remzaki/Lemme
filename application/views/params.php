@@ -71,10 +71,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div class="checkbox">
-                            <label style="float:left;">
-                                <input type="checkbox" ng-model="saveconn">Set as Default Connection
-                            </label>
+                        <div class="">
                             <button type="submit" class="btn btn-primary">Connect</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
@@ -85,7 +82,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </div>
     <!-- ConnSettings Modal -->
     <div id="ParamInfo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -121,23 +118,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </div><!-- /.modal -->
     <!-- ParamsInfo Modal -->
     <div id="GroupInfo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Group Infomation</h4>
                 </div>
                 <div class="modal-body">
-<!--                    <p><b>Tab:</b> {{info.Tab}}</p>
-                    <p><b>Category:</b> {{info.Category}}</p>-->
                     <p><b>Group:</b> {{grp[0].GroupName}}</p>
-                    <select ng-model="orderf">
-                        <option value="RecordKey">Record</option>
-                        <option value="FieldName">Alphabetical</option>
-                    </select>
-                    <p><b>Default Record/s:</b> </p>
-                    <div style="max-height:30em;overflow-x:auto;border:1px solid #E5E5E5;">
-                        <ul ng-repeat="grpval in grp | orderBy:orderf">
+                    <p><b>Default Records:</b> </p>
+                    <div style="max-height:30em;overflow-x:auto;border:0px solid #E5E5E5;">
+                        <ul ng-repeat="grpval in grp">
                             <li>Record {{grpval.RecordKey}}: {{grpval.FieldName}}: {{grpval.Value}}</li>
                         </ul>
                     </div>
@@ -169,14 +160,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div id="{{result.rParameter}}" class="result-row" ng-repeat="result in results | filter:query:strict">
                 <!--<p>-->
                 <h4>
-                    <a>
-                        <span class="glyphicon glyphicon-minus-sign" style="position: initial;" ng-if="result.RecordLimit===1"></span>
-                        <span class="glyphicon glyphicon-plus-sign" style="position: initial;" ng-if="result.RecordLimit!==1"></span>
-                    </a>
-                    <a style="cursor: pointer;" ng-click="getdetails(result.rGroup, result.rParameter)"><span>{{result.Parameter}}</span></a>
+                    <a style="cursor: pointer;/*font-size:135%;*/" ng-click="getdetails(result.rGroup, result.rParameter)"><span>{{result.Parameter}}</span></a> &nbsp;
+<!--                    <span class="label label-info" ng-if="result.RecordLimit===1">Single Record</span>
+                    <span class="label label-primary" ng-if="result.RecordLimit!==1">Multi Record</span>-->
                 </h4>
                 <!--</p>-->
-                <p>Description: <span class="desc">{{result.Description}}</span></p>
+                <p>
+                    Description: <span class="desc">{{result.Description}}</span> &nbsp;
+                    <span class="label label-info" ng-if="result.RecordLimit===1">Single Record</span>
+                    <span class="label label-primary" ng-if="result.RecordLimit!==1">Multi Record</span>
+                    <span class="label label-default">{{result.UIType}}</span>
+                </p>
                 <p>Location: {{result.Tab}} &gt; {{result.Category}} &gt; {{result.Group}} &gt; {{result.Parameter}}</p>
                 <p>XML Raw: 
                     <a style="cursor: pointer;" ng-if="result.RecordLimit!==1" ng-click="getgroupdetails(result.rGroup)">&lt;{{result.rGroup}}&gt;</a>

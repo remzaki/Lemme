@@ -85,7 +85,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div class="checkbox">
+                        <div class="">
                             <button type="submit" class="btn btn-primary">Connect</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>

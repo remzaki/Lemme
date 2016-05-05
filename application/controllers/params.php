@@ -15,22 +15,6 @@ class Params extends CI_Controller {
         $this->load->view('params');
     }
 
-    public function preset()
-    {
-        $this->load->model('params_model');
-
-        $conn_str = $this->params_model->preset();
-
-        if(!$conn_str){
-            // ERROR
-            header($_SERVER["SERVER_PROTOCOL"]." 444 No Response");
-            exit();
-        }
-
-        header('Content-type: application/json');
-        echo json_encode($conn_str);
-    }
-
     public function search()
     {
         $this->load->model('params_model');
@@ -46,10 +30,6 @@ class Params extends CI_Controller {
         if( (!isset($server)) OR (!isset($instance)) OR (!isset($username)) OR (!isset($password)) ){
             header($_SERVER["SERVER_PROTOCOL"]." 400 Bad Request");
             exit();
-        }
-
-        if((isset($data->save)) AND ($data->save)){
-                $this->params_model->update_default($server, $instance, $username, $password, $database);
         }
 
         $result = $this->params_model->search($server, $instance, $username, $password, $database);
