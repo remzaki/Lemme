@@ -132,6 +132,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
             <div class="result-panel-body">
                 <div id="stat{{result.RetryCount}}{{result.PCD}}" class="result-user-row" ng-repeat="result in results | orderBy:orderProp">
+                    <div class="tltp" ng-show="{{result.PCD===null}}" data-toggle="tooltip" data-placement="bottom" title="User is Inactive" tooltip></div>
+                    <div class="tltp" ng-show="{{result.RetryCount>=6}}" data-toggle="tooltip" data-placement="bottom" title="User is currently Locked" tooltip></div>
+                    <div class="tltp" ng-show="{{result.PCD!==null}}" data-toggle="tooltip" data-placement="bottom" title="User is Active" tooltip></div>
                     <div class="user-id"><a href="" ng-click="more(result.UserID)">{{result.UserName}}</a></div>
                     <div class="user-role">{{result.RoleName}} ({{result.RoleCode}})</div>
                     <div class="user-name">{{result.DisplayName}}</div>

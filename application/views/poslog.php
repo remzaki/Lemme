@@ -157,10 +157,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </div>
     </div>
     <!-- Results -->
-    <a name="top" id="top"></a>
+    <i name="top" id="top"></i>
     <div id="result-body" class="panel panel-default">
         <div class="panel-body">
             <div class="table-responsive">
+                <i name="top" id="top"></i>
                 <table class="table table-hover table-bordered table-condensed">
                     <thead>
                         <tr>

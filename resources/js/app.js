@@ -255,7 +255,7 @@ myApp.controller('Users', function ($scope, $http) {
 //            console.log(data.data);
             $scope.results = data.data;
             if(typeof data.count === "undefined"){
-                $scope.count = "No Records Found :(";
+                $scope.count = "No Records Found for Unit/Store "+ $scope.store;
             }
             else{
                 $scope.count = "Displaying "+data.count+" Records:";
@@ -547,6 +547,21 @@ PSApp.controller('POSLog', function($scope, $http, $anchorScroll) {
 });
 
 PSApp.directive('tooltip', function(){
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs){
+            $(element).hover(function(){
+                // on mouseenter
+                $(element).tooltip('show');
+            }, function(){
+                // on mouseleave
+                $(element).tooltip('hide');
+            });
+        }
+    };
+});
+
+myApp.directive('tooltip', function(){
     return {
         restrict: 'A',
         link: function(scope, element, attrs){
