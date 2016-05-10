@@ -117,18 +117,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </div><!-- /.modal -->
     <!-- Results -->
     <div id="result-body" class="panel panel-default">
-<!--        <div class="">
-            <h3 class="panel-title">{{count}}</h3>
-        </div>-->
         <div class="panel-body">
             <div class="result-count" style="height:20px;">
                 <div style="float:left;width:20%;min-width:162px;background:#fff;">{{count}}</div>
-<!--                <div ng-if="count!==undefined" style="float:left;width:25%;margin-left:47%;background:#ccc;">
-                    <select ng-model="orderProp">
-                        <option value="UserName">UserName</option>
-                        <option value="RoleCode">RoleCode</option>
-                    </select>
-                </div>-->
             </div>
             <div class="result-panel-body">
                 <div id="stat{{result.RetryCount}}{{result.PCD}}" class="result-user-row" ng-repeat="result in results | orderBy:orderProp">
