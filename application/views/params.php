@@ -86,7 +86,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Parameter Infomation</h4>
+                    <h4 class="modal-title">Parameter Information</h4>
                 </div>
                 <div class="modal-body">
                     <p><b>Tab:</b> {{info.Tab}}</p>
@@ -122,7 +122,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Group Infomation</h4>
+                    <h4 class="modal-title">Group Information</h4>
                 </div>
                 <div class="modal-body">
                     <p><b>Group:</b> {{grp[0].GroupName}}</p>
