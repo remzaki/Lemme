@@ -167,6 +167,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <!--</p>-->
                 <p>
                     Description: <span class="desc">{{result.Description}}</span> &nbsp;
+                    <span class="label label-success">{{result.Tab}}</span>
                     <span class="label label-info" ng-if="result.RecordLimit===1">Single Record</span>
                     <span class="label label-primary" ng-if="result.RecordLimit!==1">Multi Record</span>
                     <span class="label label-default">{{result.UIType}}</span>
