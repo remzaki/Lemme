@@ -34,7 +34,7 @@ class Poslog extends CI_Controller {
         $data = $this->getXML($idtrn);
         if($data['status']=='error'){
             header($_SERVER["SERVER_PROTOCOL"]." ".$data['heading']);
-            $data['message2'] = 'If this persists you may contact the Administrator: ';
+            $data['message2'] = 'If you think that this is a problem with the code then please file an issue to Github ';
             $this->load->view('errors/html/error_503', $data);
         }else{
             foreach($data['result'] as $xml){
@@ -92,7 +92,7 @@ class Poslog extends CI_Controller {
             $data = array(
                 'status' => 'error',
                 'heading' => '404 Not Found',
-                'message' => 'The POSLog Transaction was not found in the Server.'
+                'message' => "The POSLog Transaction was not found in the Server. Do this matter by hand, look for the specific Transaction in the Database, <i style='font-size:50%;'>I bet you cant find it too.</i>"
             );
             return $data;
         }

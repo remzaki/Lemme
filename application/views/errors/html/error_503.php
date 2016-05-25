@@ -59,7 +59,7 @@ p {
 	<div id="container">
 		<h1><?php echo $heading; ?></h1>
                 <p><?php echo $message; ?></p>
-                <p><b><?php echo $message2; ?></b> <a href="mailto:rc185173@ncr.com?Subject=Lemme%20SOS">rc185173@ncr.com</a></p>
+                <p><b><?php echo $message2; ?></b> <a target="_blank" href="https://github.com/remzaki/lemme/issues">https://github.com/remzaki/lemme/issues</a></p>
 	</div>
 </body>
 </html>
