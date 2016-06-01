@@ -7,9 +7,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <title>Lemme - ParamSearch</title>
     <link rel="shortcut icon" href="<?php echo base_url("lemme");?>/resources/img/params.ico" />
     <script src="<?php echo base_url("lemme");?>/resources/js/jquery-2.1.4.min.js"></script>
+    <script src="<?php echo base_url("lemme");?>/resources/js/spin.min.js"></script>
     <script src="<?php echo base_url("lemme");?>/resources/js/angular.min.js"></script>
     <script src="<?php echo base_url("lemme");?>/resources/js/bootstrap.min.js"></script>
-    <script src="<?php echo base_url("lemme");?>/resources/js/app.js"></script>
+    <script src="<?php echo base_url("lemme");?>/resources/js/app.js?ver=1.2"></script>
     <link rel="stylesheet" href="<?php echo base_url("lemme");?>/resources/css/normalize.css">
     <link rel="stylesheet" href="<?php echo base_url("lemme");?>/resources/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo base_url("lemme");?>/resources/css/main.css">
@@ -31,7 +32,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
                 <div id="loader" class="">
                     <p>
-                        <span id="navicn-loading-label">Loading...</span>
+                        <span id="navicn-loading-label">Connecting...</span>
                     </p>
                 </div>
                 <div id="status">
@@ -43,6 +44,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
         </div>
       </nav>
+          <div class="modal-content" id="spinn">
+          </div>
     <!-- ConnSettings Modal -->
     <div class="modal fade" id="ConnSettings" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
         <div class="modal-dialog">
@@ -91,7 +94,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="modal-body">
                     <p><b>Tab:</b> {{info.Tab}}</p>
                     <p><b>Category:</b> {{info.Category}}</p>
-                    <p><b>Group:</b> {{info.Group}} ({{info.rGroup}})</p>
+                    <p><b>Group:</b> {{info.Group}} (<a href="" ng-click="getgroupdetails(info.rGroup, info.Tab)">{{info.rGroup}}</a>)</p>
                     <p><b>Field:</b> {{info.Field}} ({{info.rParameter}})</p>
                     <p><b>Description:</b> {{info.Description}}</p>
                     <p><b>Help:</b> {{info.Help}}</p>
@@ -125,13 +128,46 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <h4 class="modal-title">Group Information</h4>
                 </div>
                 <div class="modal-body">
-                    <p><b>Group:</b> {{grp[0].GroupName}}</p>
-                    <p><b>Default Records:</b> </p>
-                    <div style="max-height:30em;overflow-x:auto;border:0px solid #E5E5E5;">
-                        <ul ng-repeat="grpval in grp">
-                            <li>Record {{grpval.RecordKey}}: {{grpval.FieldName}}: {{grpval.Value}}</li>
+                    <div ng-show="touchtypes!==''">
+                        <p><b>Group:</b> {{group}}</p>
+                        <!-- Nav tabs -->
+                        <ul id="myTabs" class="nav nav-tabs" role="tablist">
+                            <li role="presentation" ng-repeat="touchtype in touchtypes" ng-class="{active: $index == 0}">
+                                <a href="#{{touchtype.Name}}" aria-controls="thick" role="tab" data-toggle="tab" ng-click="getdefaultparams(group, touchtype.DeviceClassId)">{{touchtype.Description}}</a>
+                            </li>
+                            <li style="float:right;">
+                                <input type="text" class="form-control" placeholder="Filter" aria-describedby="basic-addon1" ng-model="filt.$">
+                            </li>
                         </ul>
+                        <div class="tab-content">
+                            <!--<div id="spinnnn" ng-show="params===''" style="height:15em;"></div>-->
+                            <div role="tabpanel" class="tab-pane fade in" ng-repeat="touchtype in touchtypes" id="{{touchtype.Name}}" ng-class="{active: $index == 0}">
+                                <!--<div id="ind{{touchtype.DeviceClassId}}" ng-show="params===''" style="height:15em;"></div>-->
+                                <div class="panel-group" style="max-height:30em;overflow-x:auto;border:0px solid #E5E5E5;">
+                                    <div class="panel panel-default">
+                                            <div class="panel-heading" ng-repeat="values in defvalues | filter:filt:strict" ng-show="values.Touchtype===touchtype.DeviceClassId" style="border-bottom:1px solid #ddd;">
+                                                <style>.panel-heading:hover{background:#e6e6e6;}</style>
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" data-target="#collapse{{values.Touchtype}}{{values.Numeric}}" href="#collapse{{values.Touchtype}}{{values.Numeric}}">{{values.Header}} = {{values.Value}}</a>
+                                                </h4>
+                                                <div id="collapse{{values.Touchtype}}{{values.Numeric}}" class="panel-collapse collapse in">
+                                                    <ul class="list-group">
+                                                        <li class="list-group-item" ng-repeat="D in values.Data">Record {{D.RecordKey}}: {{D.FieldName}} = {{D.Value}}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+<!--                        <p><b>Default Records:</b> </p>
+                        <div style="max-height:30em;overflow-x:auto;border:0px solid #E5E5E5;">
+                            <ul ng-repeat="grpval in grp">
+                                <li>Record {{grpval.RecordKey}}: {{grpval.FieldName}}: {{grpval.Value}}</li>
+                            </ul>
+                        </div>-->
                     </div>
+                    <div id="spinnn" ng-show="touchtypes==='' || defvalues===''" style="height:15em;"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -174,7 +210,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </p>
                 <p>Location: {{result.Tab}} &gt; {{result.Category}} &gt; {{result.Group}} &gt; {{result.Parameter}}</p>
                 <p>XML Raw: 
-                    <a style="cursor: pointer;" ng-if="result.RecordLimit!==1" ng-click="getgroupdetails(result.rGroup)">&lt;{{result.rGroup}}&gt;</a>
+                    <a style="cursor: pointer;" ng-if="result.RecordLimit!==1" ng-click="getgroupdetails(result.rGroup, result.Tab)">&lt;{{result.rGroup}}&gt;</a>
                     <span style="color: #337AB7" ng-if="result.RecordLimit===1">&lt;{{result.rGroup}}&gt;</span>
                     &#47; <span style="color: #337AB7">&lt;{{result.rParameter}}&gt;</span></p>
             </div>

@@ -107,15 +107,24 @@ class params_model extends CI_Model {
     }
     /*end if getdetails*/
     
-    public function getgroupdetails($server, $instance, $username, $password, $database, $group)
+    public function getgroupdefaultparams($server, $instance, $username, $password, $database, $group, $touchtype)
     {      
         $dbcon_init = $this->db_model->dbcon_init($server, $instance, $username, $password, $database);
         if(!$this->db_model->dbcon_check($dbcon_init)){
             return FALSE;
         }
         
-        $query = "select * from ParameterDefaultData where GroupName=? order by KeyValue asc, FieldName asc";
-        $result = $dbcon_init->query($query, array($group));
+        $query = "SELECT DISTINCT(pf.FieldName), pf.GroupName, pf.KeyFieldOrder, pdd.Value, pdd.KeyValue, pdd.RecordKey, DisplayOrder, DeviceClassId,
+                CAST(CASE WHEN((PATINDEX('%[^0-9]%', rtrim(ltrim(PDD.KeyValue))))<1)
+                                        THEN substring(PDD.KeyValue, 1, 18)
+                                        ELSE 999999999999999999
+                                  END as numeric)			AS NumericValue
+                FROM ParameterDefaultData pdd
+                JOIN ParameterField pf on (pdd.FieldName = pf.FieldName AND pdd.groupname=pf.groupname)
+                WHERE pdd.GroupName=?
+                AND DeviceClassId=?
+                ORDER BY numericvalue ASC, DisplayOrder ASC, RecordKey ASC";
+        $result = $dbcon_init->query($query, array($group, $touchtype));
         if ($result->num_rows() > 0){
             return $result->result();
         }
@@ -124,4 +133,20 @@ class params_model extends CI_Model {
         }
     }
     
+    public function gettouchtypes($server, $instance, $username, $password, $database, $tab)
+    {      
+        $dbcon_init = $this->db_model->dbcon_init($server, $instance, $username, $password, $database);
+        if(!$this->db_model->dbcon_check($dbcon_init)){
+            return FALSE;
+        }
+        
+        $query = "select DeviceClassId, Name, Description from DeviceClass where Name=? or ParentId=(select DeviceClassId from DeviceClass where Name=?)";
+        $result = $dbcon_init->query($query, array($tab, $tab));
+        if ($result->num_rows() > 0){
+            return $result->result();
+        }
+        else{
+            return FALSE;
+        }
+    }
 }

@@ -1,3 +1,27 @@
+var opts = {
+    lines: 9 // The number of lines to draw
+    , length: 56 // The length of each line
+    , width: 31 // The line thickness
+    , radius: 49 // The radius of the inner circle
+    , scale: 0.25 // Scales overall size of the spinner
+    , corners: 1 // Corner roundness (0..1)
+    , color: '#2e2e2e' // #rgb or #rrggbb or array of colors
+    , opacity: 0.05 // Opacity of the lines
+    , rotate: 0 // The rotation offset
+    , direction: 1 // 1: clockwise, -1: counterclockwise
+    , speed: 1 // Rounds per second
+    , trail: 60 // Afterglow percentage
+    , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+    , zIndex: 2e9 // The z-index (defaults to 2000000000)
+    , className: 'spinner' // The CSS class to assign to the spinner
+    , top: '50%' // Top position relative to parent
+    , left: '50%' // Left position relative to parent
+    , shadow: false // Whether to render a shadow
+    , hwaccel: true // Whether to use hardware acceleration
+    , position: 'absolute' // Element positioning
+};
+var spinner = new Spinner(opts);
+
 var PSApp = angular.module('PSApp',['infinite-scroll']);
 var myApp = angular.module('myApp',[]);
 
@@ -12,6 +36,7 @@ myApp.controller('Search', function ($scope, $http) {
 	// - OFFLINE STATUS
 	// - DONT GET PARAMS
         // - DISPLAY ERROR
+        $scope.isCollapsed = true;
         $scope.username = 'rteuser';
         $scope.password = 'RTE$t0re';
         
@@ -97,10 +122,10 @@ myApp.controller('Search', function ($scope, $http) {
 //            console.log(group, field)
         }   // function getdetails() end
         
-        function getgroupdetails(group){
+        function getdefaultparams(group, touchtype){
             var req = {
             method: 'POST',
-            url: base_url+'/params/group',
+            url: base_url+'/params/getdefaultparams',
             headers: {
                    'Content-Type': 'application/json'
                },
@@ -109,20 +134,74 @@ myApp.controller('Search', function ($scope, $http) {
                    'instance' : $scope.instance,
                    'username' : $scope.username,
                    'password' : $scope.password,
-                   'group' : group
+                   'group' : group,
+                   'touchtype' : touchtype
                }
            };
 
            $http(req).
            success(function(data) {
-               $scope.grp = data;
-               $('#GroupInfo').modal('show');
-               console.log(data);
+//                $scope.defvalues = data;
+                var out = [];
+                for(var i=0; i <= data.length; i++){
+                    if(i < data.length){
+                        if(data[i].KeyFieldOrder===1){
+                            var header = data[i].FieldName;
+                            var ttype = data[i].DeviceClassId;
+                            var val = data[i].Value;
+                            var num = data[i].NumericValue;
+                            var temp = [data[i]];
+                        }else{
+                            temp.push(data[i]);
+                        }
+                        var last = data[i].DisplayOrder;
+                        if(last===0){
+                            out.push({
+                                'Header' : header,
+                                'Touchtype' : ttype,
+                                'Value' : val,
+                                'Numeric' : num,
+                                'Data' : temp
+                                });
+                        }
+                    }
+                }
+                $scope.defvalues = out;
+                console.log(out);
+                spinner.stop();
            }).
            error(function() {
-               console.log("error getgroupdetails()");
+                console.log("error getdefaultparams()");
+                spinner.stop();
            });
-        }   // function getgroupdetails() end
+        }   // function getdefaultparams() end
+        
+        function gettouchtypes(tab){
+            var req = {
+            method: 'POST',
+            url: base_url+'/params/gettouchtypes',
+            headers: {
+                   'Content-Type': 'application/json'
+               },
+           data: {
+                   'server' : $scope.server,
+                   'instance' : $scope.instance,
+                   'username' : $scope.username,
+                   'password' : $scope.password,
+                   'tab' : tab
+               }
+           };
+
+           $http(req).
+           success(function(data) {
+               $scope.touchtypes = data;
+               spinner.stop();
+           }).
+           error(function() {
+               console.log("error gettouchtypes()");
+               spinner.stop();
+           });
+        }   // function gettouchtypes() end
         
         function loader(opt){
             var elem = angular.element('#loader');
@@ -152,6 +231,7 @@ myApp.controller('Search', function ($scope, $http) {
         }
 		
 	$scope.submit = function(){
+                $scope.touchtypes = '';
 		conn_db_req($scope.server);
 		$('#ConnSettings').modal('hide');
 	};
@@ -161,13 +241,61 @@ myApp.controller('Search', function ($scope, $http) {
         };
         
         $scope.getdetails = function(group, field){
-            getdetails(group, field)
+            getdetails(group, field);
         };
         
-        $scope.getgroupdetails = function(group){
-            getgroupdetails(group)
+        $scope.getgroupdetails = function(group, tab){
+            $('#ParamInfo').modal('hide');
+            var target = document.getElementById('spinnn');
+            var touchtype = 1;
+            
+            $scope.group = group;
+            
+            $('#GroupInfo').modal('show');
+            var a = $scope.touchtypes;
+            if(typeof a ==='undefined' || a===null || a===''){
+                $scope.touchtypes='';
+                spinner.spin(target);
+                gettouchtypes(tab);
+            }else{
+                if(tab!==a[0].Name){
+                    gettouchtypes(tab);
+                }
+            }
+            
+            a = $scope.defvalues;
+            if(typeof a !=='undefined'){
+//                out[0].Data[0].GroupName
+                var a = a[0].Data[0];
+//                console.log(a);
+                for(var key in a){
+                    if(typeof a[key] === "array"){
+                        a = a[key][0];
+                    }
+                }
+                var groupname = a.GroupName;
+                groupname = groupname.slice(0, 3);
+                if(groupname===tab){
+                    touchtype = a.DeviceClassId;
+                }else{
+                    if(tab==="POS"){
+                        touchtype = 1;
+                    }else{
+                        touchtype = 2;
+                    }
+                }
+            }
+            
+            $scope.getdefaultparams(group, touchtype);
         };
-                
+        
+        $scope.getdefaultparams = function(group, touchtype){
+            $scope.defvalues='';
+            var target = document.getElementById('spinnn');
+            spinner.spin(target);
+            console.log("group:"+group+"|touchtype:"+touchtype);
+            getdefaultparams(group, touchtype);
+        };
 });
 
 myApp.controller('Users', function ($scope, $http) {

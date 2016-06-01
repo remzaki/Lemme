@@ -77,7 +77,7 @@ class Params extends CI_Controller {
         echo json_encode($result);
     }
     
-    public function group()
+    public function getdefaultparams()
     {
         $this->load->model('params_model');
 
@@ -88,6 +88,7 @@ class Params extends CI_Controller {
         $username = $data->username;
         $password = $data->password;
         $group = $data->group;
+        $touchtype = $data->touchtype;
         $database = 'RTEEnterpriseOptionsData';
 
         if( (!isset($server)) OR (!isset($instance)) OR (!isset($username)) OR (!isset($password)) ){
@@ -95,7 +96,38 @@ class Params extends CI_Controller {
             exit();
         }
 
-        $result = $this->params_model->getgroupdetails($server, $instance, $username, $password, $database, $group);
+        $result = $this->params_model->getgroupdefaultparams($server, $instance, $username, $password, $database, $group, $touchtype);
+
+        if(!$result){
+                // DATABASE OFFLINE
+                header($_SERVER["SERVER_PROTOCOL"]." 503 Service Unavailable");
+                exit();
+        }
+
+        // DATABASE ONLINE
+        header('Content-type: application/json');
+        echo json_encode($result);
+    }
+    
+    public function gettouchtypes()
+    {
+        $this->load->model('params_model');
+
+        $postdata = file_get_contents("php://input");
+        $data = json_decode($postdata);
+        $server = $data->server;
+        $instance = $data->instance;
+        $username = $data->username;
+        $password = $data->password;
+        $tab = $data->tab;        
+        $database = 'RTEEnterpriseOptionsData';
+
+        if( (!isset($server)) OR (!isset($instance)) OR (!isset($username)) OR (!isset($password)) ){
+            header($_SERVER["SERVER_PROTOCOL"]." 400 Bad Request");
+            exit();
+        }
+
+        $result = $this->params_model->gettouchtypes($server, $instance, $username, $password, $database, $tab);
 
         if(!$result){
                 // DATABASE OFFLINE

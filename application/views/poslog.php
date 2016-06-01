@@ -7,10 +7,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <title>Lemme - POSLogSearch</title>
     <link rel="shortcut icon" href="<?php echo base_url("lemme");?>/resources/img/poslog.ico" />
     <script src="<?php echo base_url("lemme");?>/resources/js/jquery-2.1.4.min.js"></script>
+    <script src="<?php echo base_url("lemme");?>/resources/js/spin.min.js"></script>
     <script src="<?php echo base_url("lemme");?>/resources/js/angular.min.js"></script>
     <script src="<?php echo base_url("lemme");?>/resources/js/ng-infinite-scroll.min.js"></script>
     <script src="<?php echo base_url("lemme");?>/resources/js/bootstrap.min.js"></script>
-    <script src="<?php echo base_url("lemme");?>/resources/js/app.js"></script>
+    <script src="<?php echo base_url("lemme");?>/resources/js/app.js?ver=1.2"></script>
     <link rel="stylesheet" href="<?php echo base_url("lemme");?>/resources/css/normalize.css">
     <link rel="stylesheet" href="<?php echo base_url("lemme");?>/resources/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo base_url("lemme");?>/resources/css/main.css">
@@ -55,7 +56,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
                 <div id="loader" class="">
                     <p>
-                        <span id="navicn-loading-label">Loading...</span>
+                        <span id="navicn-loading-label">Connecting...</span>
                     </p>
                 </div>
                 <div id="status">

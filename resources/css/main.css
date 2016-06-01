@@ -17,6 +17,10 @@ body{
     font-family: Open Sans Regular;
 }
 
+input, a{
+    outline: none;
+}
+
 .desc{
     font-family: Open Sans Light;
 }
