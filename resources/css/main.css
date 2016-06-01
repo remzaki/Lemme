@@ -257,8 +257,15 @@ div[id^="stat6"], div[id*="stat6"] {
     bottom: 0;
     width: 100%;
     height: 5em;
+    padding: 1em 2em 1em 2em;
 }
-
+#nav-footer .footer a{
+    color: #999;
+    padding: 0 0.5em 0 0.5em;
+}
+#nav-footer .footer a:hover{
+    color: #b3b3b3;
+}
 .filter-group{
     max-width:1283px;
     margin: 0 auto;

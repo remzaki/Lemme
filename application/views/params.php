@@ -218,10 +218,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </div>
 <!-- Footer -->
     <div id="nav-footer">
-        <p>Footer here...</p>
-        <div class="footer">Took {elapsed_time}s and {memory_usage} of Memory</div>
-        <a href="#top">Back to Top</a>
+        <p><a href="#top">Back to Top</a><span style="float:right;">Took {elapsed_time}s and {memory_usage} of Memory</span></p>
+        <div class="footer" style="line-height: 10px;">Other Tools: <a href="./poslog">POSLog Search</a><a href="./users">User Search</a> | Other Sites: <a href="../RTI.html">RTI Cheatsheet</a><a href="../training/">AS Overview</a><span style="float: right;">Developed by<a target="_blank" href="https://github.com/remzaki">remzaki</a>&copy; 2016</span></div>
     </div>
-
 </body>
 </html>
