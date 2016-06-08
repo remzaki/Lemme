@@ -15,29 +15,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="<?php echo base_url("lemme");?>/resources/css/normalize.css">
     <link rel="stylesheet" href="<?php echo base_url("lemme");?>/resources/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo base_url("lemme");?>/resources/css/main.css">
-    <script>var base_url='<?php echo base_url("lemme");?>';$(document).ready(function(){$(function(){$('[data-toggle="tooltip"]').tooltip();});});
+    <script>var base_url='<?php echo base_url("lemme");?>';$(document).ready(function(){$(function(){$('[data-toggle="tooltip"]').tooltip();});$(function(){$('[data-toggle="popover"]').popover()})});
     function able(){
-			var e = document.getElementById("table");
-			var strUser = e.options[e.selectedIndex].text;
-			document.getElementById("transtype").disabled = false;
-			if(strUser!=="Transactions"){
-				//	DISABLE THE TRANSACTION TYPE DROPDOWN
-				document.getElementById("transtype").disabled = true;
-			}
-		}
-    function pick(e){
-			var prev = document.getElementById('hylyt').value;
-			if(prev!==""){
-//				document.getElementById(prev).style.background='';
-                                document.getElementById(prev).className='';
-			}
-//			onmouseup = document.getElementById(e).style.background='#D6D6D6';
-                        onmouseup = document.getElementById(e).className='active';
-			document.getElementById('hylyt').value=e;
-		};
-    $(function () {
-        $('[data-toggle="popover"]').popover();
-      })
+            var e = document.getElementById("table");
+            var strUser = e.options[e.selectedIndex].text;
+            document.getElementById("transtype").disabled = false;
+            if(strUser!=="Transactions"){
+//                DISABLE THE TRANSACTION TYPE DROPDOWN
+                document.getElementById("transtype").disabled = true;
+            }
+        }
     </script>
 </head>
 <body ng-controller='POSLog' ng-init="base_url='<?php echo base_url("lemme");?>'">
@@ -106,6 +93,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </div>
     </div>
     <!-- ConnSettings Modal -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                ...
+            </div>
+        </div>
+    </div>
     <!-- Form Inputs -->
     <div id="form">
         <div id="header-form2">
@@ -124,35 +118,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
                     </div> | 
                     <div class="form-group">
-                      <div class="input-group">
-                            <span class="input-group-addon">Store #</span>
-                            <input id="filters" type="text" class="form-control" placeholder="" ng-model="store">
+                            <input id="filters" type="text" class="form-control" placeholder="Store #" ng-model="store">
                         </div>
+                    <div class="form-group">
+                            <input id="filters" type="text" class="form-control" placeholder="Terminal #" ng-model="term">
                     </div>
                     <div class="form-group">
-                      <div class="input-group">
-                            <span class="input-group-addon">Terminal #</span>
-                            <input id="filters" type="text" class="form-control" placeholder="" ng-model="term">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="input-group">
-                            <span class="input-group-addon">Transaction #</span>
-                            <input id="filters" type="text" class="form-control" placeholder="" ng-model="trans">
-                        </div>
+                            <input id="filters" type="text" class="form-control" placeholder="Trans #" ng-model="trans">
                     </div> | 
                     <div class="form-group">
                       <div class="input-group">
                             <span class="input-group-addon">Type</span>
                             <select id="transtype" class="form-control" name="transtype" onchange="able()" ng-model="transtype" ng-options="type.TransactionTypeID as type.TransactionTypeDescription for type in types">
                                 <option value="">All</option>
-                                <!--option ng-repeat="type in types" value="{{type.TransactionTypeID}}">{{type.TransactionTypeDescription}}</option-->
                             </select>
                         </div>
                     </div>
-                    <button id="search" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-refresh"></span></button>
-<!--                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Generate URL Sharing"><span class="glyphicon glyphicon-link"></span></button>
-                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Generate SQL Script"><span class="glyphicon glyphicon-th-list"></span></button>-->
+                    <button id="search" type="submit" class="btn btn-primary">Search <span class="glyphicon glyphicon-refresh"></span></button>
                 </form>
             </div>
         </div>
@@ -176,14 +158,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <th ng-show="layout==='ErrorQueue'">Error</th>
                             <th colspan='2' id="action">Action</th>
                         </tr>
-<!--                        <tr>
-                            <th>TransType</th>
-                            <th>TransTypeId</th>
-                            <th>Store</th>
-                            <th>Terminal</th>
-                            <th>POSLog</th>
-                            <th colspan='2' style="text-align:center;">Action</th>
-                        </tr>-->
                     </thead>
                     <tbody infinite-scroll="loadMore(table, store, term, trans, transtype)" infinite-scroll-disabled="busy" infinite-scroll-distance="0">
                         <tr ng-repeat="item in items" ng-click="setSelected(item.TranID)" ng-class="{active : item.TranID === idSelected}">
@@ -204,6 +178,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </a>
                             </td>
                         </tr>
+                        <tr ng-show="empty"><td colspan="6" style='text-align:center;'>No Results Found</td></tr>
                         <tr ng-show="busy"><td colspan="6" style='text-align:center;'>Loading data...</td></tr>
                     </tbody>
                 </table>

@@ -147,9 +147,10 @@ class Poslog extends CI_Controller {
         $filter = $this->aid->filter($table, $store, $term, $trans, $transtype);
         $transtypes = $this->transtypes($dbcon_init);
         $result = $this->poslog_model->search($dbcon_init, $row, $table, $filter);
+        
         if($result){
             header('Content-type: application/json');
-            echo json_encode(array($result[0], $transtypes, $result[1], $filter));
+            echo json_encode(array($result, $transtypes));
         }
         else{
             header($_SERVER["SERVER_PROTOCOL"]." 404 No Results");

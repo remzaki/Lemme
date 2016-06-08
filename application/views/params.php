@@ -16,7 +16,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="<?php echo base_url("lemme");?>/resources/css/main.css">
     <script>var base_url='<?php echo base_url("lemme");?>';$(document).ready(function(){$(function(){$('[data-toggle="tooltip"]').tooltip();});});</script>
 </head>
-<body ng-controller="Search">
+<body ng-controller="Params">
     <!-- Navigation -->
     <nav id="nav-header" class="navbar navbar-default">
         <div class="container-fluid">

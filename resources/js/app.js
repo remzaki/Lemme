@@ -25,7 +25,7 @@ var spinner = new Spinner(opts);
 var PSApp = angular.module('PSApp',['infinite-scroll']);
 var myApp = angular.module('myApp',[]);
 
-myApp.controller('Search', function ($scope, $http) {
+myApp.controller('Params', function ($scope, $http) {
  // - GET THE DEFAULT CONNECTION STRINGS
  // - CONNECT TO IT
 	// IF ONLINE
@@ -152,7 +152,12 @@ myApp.controller('Search', function ($scope, $http) {
                             var num = data[i].NumericValue;
                             var temp = [data[i]];
                         }else{
-                            temp.push(data[i]);
+                            if(typeof temp === "undefined"){
+                                var temp = [data[i]];
+                            }
+                            else{
+                                temp.push(data[i]);
+                            }
                         }
                         var last = data[i].DisplayOrder;
                         if(last===0){
@@ -163,6 +168,8 @@ myApp.controller('Search', function ($scope, $http) {
                                 'Numeric' : num,
                                 'Data' : temp
                                 });
+//                            var temp = "";
+                            console.log("output pushed!");
                         }
                     }
                 }
@@ -604,6 +611,7 @@ PSApp.controller('POSLog', function($scope, $http, $anchorScroll) {
     }
     
     $scope.loadMore = function(table, store, term, trans, transtype) {
+        $scope.empty = false;
         if(($scope.server!=="") && ($scope.after / 10 % 1 === 0)){
             if (this.busy) return;
             this.busy = true;
@@ -640,10 +648,10 @@ PSApp.controller('POSLog', function($scope, $http, $anchorScroll) {
                 
                 $scope.layout = table;
             }.bind(this)).
-            error(function(status) {
-                if(status !=="") console.log(status);
+            error(function(data) {
                 $scope.end = true;
                 $scope.busy = false;
+                $scope.empty = true;
             });
         }
     };
@@ -655,7 +663,6 @@ PSApp.controller('POSLog', function($scope, $http, $anchorScroll) {
         $scope.term = null;
         $scope.trans = null;
         $scope.transtype = null;
-        //        conn_db_req($scope.server, $scope.table, $scope.store, $scope.term, $scope.trans, $scope.transtype);
         conn_db_req($scope.server, $scope.table,'','','','');
     };
     

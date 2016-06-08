@@ -134,7 +134,7 @@ class params_model extends CI_Model {
     }
     
     public function gettouchtypes($server, $instance, $username, $password, $database, $tab)
-    {      
+    {
         $dbcon_init = $this->db_model->dbcon_init($server, $instance, $username, $password, $database);
         if(!$this->db_model->dbcon_check($dbcon_init)){
             return FALSE;

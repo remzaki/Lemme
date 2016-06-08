@@ -1,6 +1,6 @@
 @font-face {
-  font-family: "Glyphicons Halflings";
-  src: url("../fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
+    font-family: "Glyphicons Halflings";
+    src: url("../fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
 }
 
 @font-face {
@@ -267,7 +267,7 @@ div[id^="stat6"], div[id*="stat6"] {
     color: #b3b3b3;
 }
 .filter-group{
-    max-width:1283px;
+    max-width:901px;
     margin: 0 auto;
 }
 #filters{

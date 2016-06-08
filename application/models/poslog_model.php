@@ -55,9 +55,9 @@ class poslog_model extends CI_Model {
         }
         
         $query = $dbcon_init->query($script);
-
+        
         if ($query->num_rows() > 0){
-            return array($query->result(), $script);
+            return $query->result();
         }
         else{
             return FALSE;
