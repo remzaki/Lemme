@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?php echo base_url("lemme");?>/resources/js/spin.min.js"></script>
     <script src="<?php echo base_url("lemme");?>/resources/js/angular.min.js"></script>
     <script src="<?php echo base_url("lemme");?>/resources/js/bootstrap.min.js"></script>
-    <script src="<?php echo base_url("lemme");?>/resources/js/app.js?ver=1.2"></script>
+    <script src="<?php echo base_url("lemme");?>/resources/js/app.js?ver=1.3"></script>
     <link rel="stylesheet" href="<?php echo base_url("lemme");?>/resources/css/normalize.css">
     <link rel="stylesheet" href="<?php echo base_url("lemme");?>/resources/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo base_url("lemme");?>/resources/css/main.css">
